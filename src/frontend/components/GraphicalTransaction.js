@@ -89,21 +89,46 @@ class GraphicalTransaction extends Component {
     this.drawTransaction();
   }
 
+  /**
+    Loop 2 times. One time to loop for Receipt transaction
+    Second time to loop for Payment transaction.
+    1st loop, col=0, it will draw the Receipt and Own wallets, together with the line between them
+    2nd loop, col=1, it will draw the Own and Payment wallets, and the lines.
+    Combining of the amount when from-to wallets are the same, is already done in redux reducer
+    Here we need to take care to ensure wallets in a given column is unique.
+  */
   drawTransaction() {
-    // Loop 3 columns to draw the wallet. Column 1 contains the Receipt Wallets, and so on...
-    // Each loop draw 2 columns, the middle column is ownWallet
     if (!this.props.transHistory || !this.props.transHistory['merged']) return;
+    // clear canvas
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
 
+    // the array of ownWallets that is to draw. Hide if not found here
     let walletsToShow = this.props.transHistory['show'];
+    // count number of wallets drawn for each column, used to position the wallet
     let sourceWalletCnt, targetWalletCnt;
-    let ownWalletPos = [{},{},{}]; // during col 0 loop, to store the ownWallet postion, to be used during col 1 loop
+    //------------------------------------------------------------------------------------
+    // ownWalletPos :
+    // stores the wallet that has been drawn, and used for checking
+    // to ensure unique wallet in each column
+    // if wallet already drawn, reuse it.
+    //
+    // ownWalletPos structure:
+    //   ownWalletPost[<col>][<wallet>][<info>]
+    //     col: is either 0, 1, 2. It is an array. Representing Receipt, Own and Payment columns
+    //     wallet: the wallet that has already drawn
+    //     info: can be '_pos' and '_fromPos'.
+    //                '_pos' store the position of the wallet
+    //                '_fromPos' store the x,y,width,height of the wallet
+    //------------------------------------------------------------------------------------
+    let ownWalletPos = [{},{},{}];
     for (let col=0; col<2; col++) {
-
+      // Get the wallets info process by redux reducer.
       let wallets = this.props.transHistory['merged'][col];
       sourceWalletCnt = 0;
-      if (col == 1) { // so that it will not overlap the ownWallets column
+      if (col == 1) {
+        // When change from col 0 to 1, require to ensure the ownWallet column
+        // has the wallet drawn information stored during col=0
         sourceWalletCnt = targetWalletCnt;
       }
       targetWalletCnt = 0;
@@ -113,7 +138,7 @@ class GraphicalTransaction extends Component {
         let sourcePos;
         if (col == 1) {
           if (ownWalletPos[1][sourceWallet]) {
-            // wallet already drawn during col 0 loop
+            // wallet already drawn during col 0 loop, so reuse
             sourceDrawn = true;
             sourcePos = ownWalletPos[1][sourceWallet]['_pos'];
           }
@@ -149,12 +174,16 @@ class GraphicalTransaction extends Component {
             if (walletsToShow.indexOf(ownWallet) >=0) { // draw only if filter allow
               let fromPos = null;
               let toPos;
-              
+              // (1) 'fromPos' is generated when drawing the source wallet, and used when drawing the line
+              // So if we are skipping drawing the source, we need to provide the previously generated
+              // 'fromPos' for use when drawing the line.
               if (col==1 && sourceDrawn) fromPos = ownWalletPos[1][sourceWallet]['_fromPos'];
               toPos = drawWallets(col, sourceDrawn, sourceWallet, targetWallet,
                                         sourcePos, targetPos, walletInfo, fromPos);
+              // (2) To store the toPos for use in (1) later
               if (col==0) ownWalletPos[1][targetWallet]['_fromPos'] = toPos;
             } else {
+              // if filter hide the ownWallet, then move back the counters
               if (!sourceDrawn) {
                 sourceWalletCnt--;
               }
