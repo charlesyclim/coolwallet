@@ -14,10 +14,19 @@ class App extends Component {
     }
   }
 
+  /**
+  * method for child component to hide the History element
+  */
   showHistoryList(showHistoryList) {
     this.setState({showHistoryList});
   }
 
+  /**
+  * Render 3 parts:
+  * Part 1: AddTransaction for user to add transaction between wallet
+  * Part 2: ListHistory to list all the transaction performed
+  * Part 3: GraphicalTransaction to display the transactions in graphical format
+  */
   render() {
     return (
       <div className="wallet-container">
