@@ -1,0 +1,47 @@
+.add-transaction.row > * {
+  padding-top: 10px;
+}
+
+button.btn.btn-default {
+    vertical-align: top;
+    margin-top: 20px;
+}
+
+.wallet-container {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  justify-content: space-around;
+}
+
+.wallet-container > * {
+  flex: 1 100%;
+}
+
+.add-transaction {
+  background: lightblue;
+  --background: #5AC5B5;
+  padding: 0px;
+  height: 130px;
+  margin-top: 0px;
+}
+
+.add-transaction > header {
+  margin: auto;
+  padding-bottom: 30px;
+  height: 30px;
+}
+
+
+.wallet-display {
+  padding: 1px;
+  height: 150px;
+  margin-top: 2px;
+  line-height: 530px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
