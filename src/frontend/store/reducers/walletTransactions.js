@@ -1,7 +1,7 @@
 /**
  The state data structure is as follows:
  	 state['merged'][<col>][<source>][target]=<walletInfo>
- 	 		where	<col> could be either 0, 1 or 2 (where 0==receipt, 1==own, 2==payment)
+ 	 		where	<col> could be either 0, 1 and 2 (0=Receipt, 1=Own, 2=Payment)
 		 				<source> is the name of the source wallet
 						<target> is the name of the target wallet
 						<walletInfo> is an object containing the flow info, which has this structure:
@@ -11,7 +11,7 @@
 									maxAmt: sum of all the max amount,
 								}
 	It will also have this side structure, valid for column 1 only:
-		state[1][<source>]['_show'] = true/false
+		state['show'] = array of the wallets to show (string array)
  And also in term of transIds
  		state['byTransId'][transId] = {
 																		transId: unique id for each transaction
@@ -29,6 +29,9 @@ const walletTransactions = (state = {}, action) => {
 
 	switch (action.type) {
 	case 'PROCESS_TRANS':
+	/**
+	* Called everytime there is a transaction executed
+	*/
 		// action = {transType,trans={transId,transType,source,target,amount,minAmt,maxAmt}}
 		// shallow clone
 		newstate = Object.assign({}, state);
@@ -88,6 +91,9 @@ const walletTransactions = (state = {}, action) => {
 
     return newstate;
 	case 'SET_SHOW_TRANS':
+	/**
+	* Called everytime user changes the ownWallet to display
+	*/
 	// stat[1] store the own wallets
 		newstate = Object.assign({},state);
 		newstate['show'] = action['walletsToShow'];
