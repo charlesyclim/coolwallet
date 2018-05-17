@@ -6,12 +6,12 @@ You can find the most recent version of this guide [here](https://github.com/fac
 ## Demo
 Demo is available at http://coolwallet.surge.sh/  
   
-User Guide: 
+User Guide:   
 (1) Go to http://coolwallet.surge.sh/  
 (2) Enter all the fields in WALLET TRANSACTIONS section:  
-	(a) Select a Type first, so that all the other fields will be enabled.  
-	(b) Ensure Amount, MinAmt and MaxAmt are number or '.'  
-	(c) Ensure Amount is between MinAmt and MaxAmt, inclusive  
+&nbsp; &nbsp; (a) Select a Type first, so that all the other fields will be enabled.  
+&nbsp; &nbsp; (b) Ensure Amount, MinAmt and MaxAmt are number or '.'  
+&nbsp; &nbsp; (c) Ensure Amount is between MinAmt and MaxAmt, inclusive  
 (3) Once entered correctly, the 'Transfer' button will be enabled. Click on it to save the transaction.  
 Have fun!  
   
