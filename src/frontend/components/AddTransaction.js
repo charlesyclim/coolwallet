@@ -82,7 +82,8 @@ class AddTransaction extends Component {
     event.preventDefault();
     let target = event.target;
     if (isNaN(target.value)) return;
-    this.setState({[target.id]:target.value});
+    let value = target.value? parseInt(target.value):target.value;
+    this.setState({[target.id]:value});
   }
 
   onSave() {
